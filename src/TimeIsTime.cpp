@@ -1,8 +1,8 @@
 /*
  * Azerothcore Module:     TimeIsTime
- * Author:                 Dunjeon www.guilded.gg/solofriendly
+ * Author:                 Dunjeon
  * Contributing Author(s): lasyan3, vratam @ RegWorks
- * Version:                20220128
+ * Version:                20250608
  * License:                GNU Affero General Public License v3.0.
  */
 
@@ -24,11 +24,11 @@ public:
     TimeIsTimeBeforeConfigLoad() : WorldScript("TimeIsTimeBeforeConfigLoad") { }
 
     void OnBeforeConfigLoad(bool /*reload*/) override {
-        stimeistime_enable =  sConfigMgr->GetOption<bool>("TimeIsTime.Enable", true);
+        stimeistime_enable = sConfigMgr->GetOption<bool>("TimeIsTime.Enable", true);
         stimeistime_announce = sConfigMgr->GetOption<bool>("TimeIsTime.Announce", true);
         stimeistime_speed_rate = sConfigMgr->GetOption<float>("TimeIsTime.SpeedRate", 1.0);
         stimeistime_hour_offset = sConfigMgr->GetOption<float>("TimeIsTime.HourOffset", 0.0);
-        stimeistime_time_start = sConfigMgr->GetOption<uint32>("TimeIsTime.TimeStart", 0);
+        stimeistime_time_start = sConfigMgr->GetOption<int>("TimeIsTime.TimeStart", 0);
     }
 };
 
@@ -37,12 +37,12 @@ public:
 
     TimeIsTime() : PlayerScript("TimeIsTime") { }
 
-    void OnLogin(Player* player) {
+    void OnPlayerLogin(Player* player) {
         if (stimeistime_enable && stimeistime_announce)
             ChatHandler(player->GetSession()).SendSysMessage("服务器已开启 |cff4CFF00TimeIsTime |r模块");
     }
 	
-    void OnSendInitialPacketsBeforeAddToMap(Player* player, WorldPacket& data) override {
+    void OnPlayerSendInitialPacketsBeforeAddToMap(Player* player, WorldPacket& data) override {
         if (!stimeistime_enable)
             return;
 
